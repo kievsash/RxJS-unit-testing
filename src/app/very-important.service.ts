@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {asapScheduler, asyncScheduler, merge, of, Subject} from 'rxjs';
+import {asapScheduler, asyncScheduler, combineLatest, merge, of, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {delay, repeatWhen, take} from 'rxjs/operators';
 
@@ -23,7 +23,7 @@ export class VeryImportantService {
   }
 
   getData(timeSec) {
-    this.http.get('some_url')
+    return this.http.get('some_url')
       .pipe(
         repeatWhen((n) => n.pipe(
           delay(timeSec * 1000),
