@@ -1,8 +1,9 @@
 import {TestBed} from '@angular/core/testing';
 
-import {asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
+import {asapScheduler, asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
 import {concatMap, delay, switchMap} from 'rxjs/operators';
-import {VeryImportantServiceVTS} from './2. very-important.VirtualTimeScheduler.service';
+import {AsapScheduler} from 'rxjs/internal/scheduler/AsapScheduler';
+import {VeryImportantServiceVTS} from './2. very-important.service.VirtualTimeScheduler';
 
 describe('VeryImportantServiceVTS', () => {
   let service;
@@ -31,6 +32,32 @@ describe('VeryImportantServiceVTS', () => {
     });
   });
 
+  describe('getRangeASAP (with trick)', () => {
+    it('should emit 4 specific values (with trick)', () => {
+      const virtScheduler = new VirtualTimeScheduler();
+
+      asapScheduler.schedule = virtScheduler.schedule.bind(
+        virtScheduler
+      ) as any;
+
+      mockHttp = {get: () => of(42, virtScheduler)};
+
+      service = new VeryImportantServiceVTS(mockHttp);
+      const range$ = service.getRangeASAP();
+      const result = [];
+      range$.subscribe({
+        next: (value) => {
+          result.push(value);
+        }
+      });
+
+      virtScheduler.flush();
+      expect(result).toEqual([0, 1, 2, 3]);
+
+      delete asapScheduler.schedule;
+    });
+  });
+
   describe('getData', () => {
     it('should emit 3 specific values', () => {
       const scheduler = new VirtualTimeScheduler();
@@ -47,6 +74,27 @@ describe('VeryImportantServiceVTS', () => {
 
       scheduler.flush();
       expect(result).toEqual([42, 42, 42]);
+    });
+  });
+
+  describe('getData (AsyncScheduler.delegate)', () => {
+    it('should emit 3 specific values', () => {
+      const scheduler = new VirtualTimeScheduler();
+      (asyncScheduler.constructor as any).delegate = scheduler;
+      service.http = {get: () => of(42, asyncScheduler)};
+
+      const range$ = service.getData(30);
+      const result = [];
+
+      range$.subscribe({
+        next: (value) => {
+          result.push(value);
+        }
+      });
+
+      scheduler.flush();
+      expect(result).toEqual([42, 42, 42]);
+      (asyncScheduler.constructor as any).delegate = undefined;
     });
   });
 
@@ -86,17 +134,16 @@ describe('VeryImportantServiceVTS', () => {
       const result = [];
       service.http = {get: () => of('42', scheduler)};
 
-      const searchResults$ = service.getSearchResults(
-        input$,
-        scheduler);
+      const searchResults$ = service.getSearchResults(input$, scheduler);
 
       searchResults$.subscribe({
-        next: (value) => {console.log('next', value); result.push(value)}
+        next: (value) => {
+          result.push(value);
+        }
       });
 
       scheduler.flush();
 
-      console.log('result ', result);
       expect(result).toEqual(['42', '42']);
     });
   });

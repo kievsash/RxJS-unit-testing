@@ -15,6 +15,7 @@ export class VeryImportantServiceVTS {
   }
 
   getRangeASAP(scheduler = asapScheduler) {
+    console.log('(asapScheduler.constructor as any).delegate ', (asapScheduler.constructor as any).delegate)
     return of(0, 1, 2, 3, scheduler); // emits 0..1..2..3
   }
 

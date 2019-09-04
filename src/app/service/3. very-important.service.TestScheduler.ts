@@ -14,15 +14,15 @@ export class VeryImportantServiceTS {
   constructor(private http: HttpClient) {
   }
 
-  getRangeASAP() {
-    return of(0, 1, 2, 3); // emits 0..1..2..3
+  getRangeASAP(scheduler = asapScheduler) {
+    return of(0, 1, 2, 3, scheduler); // emits 0..1..2..3
   }
 
-  getData(timeSec) {
+  getData(timeSec, scheduler = asyncScheduler) {
     return this.http.get('some_url')
       .pipe(
         repeatWhen((n) => n.pipe(
-          delay(timeSec * 1000),
+          delay(timeSec * 1000, scheduler),
           take(2)
         ))
       );
@@ -35,11 +35,11 @@ export class VeryImportantServiceTS {
     );
   }
 
-  getSearchResults(input$, scheduler = asyncScheduler) {
+  getSearchResults(input$, timeout = 750, scheduler = asyncScheduler) {
     return input$.pipe(
       map((e: Event) => (e.target as HTMLInputElement).value),
       filter((text: string) => text.length > 2),
-      debounceTime(750),
+      debounceTime(timeout, scheduler),
       distinctUntilChanged(),
       switchMap((text) => this.http.get('url?search=' + text))
     );

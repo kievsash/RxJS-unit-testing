@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 
 import {asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
 import {concatMap, delay, switchMap} from 'rxjs/operators';
-import {VeryImportantServiceVTS} from './2. very-important.VirtualTimeScheduler.service';
+import {VeryImportantServiceVTS} from './2. very-important.service.VirtualTimeScheduler';
 
 describe('VeryImportantServiceVTS', () => {
   let service;
