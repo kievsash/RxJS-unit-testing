@@ -1,39 +1,28 @@
 import {TestBed} from '@angular/core/testing';
 
-import {asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
+import {asapScheduler, asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
 import {concatMap, delay, switchMap} from 'rxjs/operators';
-import {VeryImportantServiceVTS} from './2. very-important.service.VirtualTimeScheduler';
+import {VeryImportantServiceTS} from './3. very-important.service.TestScheduler';
+import {TestScheduler} from 'rxjs/testing';
 
-describe('VeryImportantServiceVTS', () => {
+describe('VeryImportantServiceTS', () => {
   let service;
   let mockHttp;
 
   beforeEach(() => {
     mockHttp = {get: () => of(42, asyncScheduler)};
 
-    service = new VeryImportantServiceVTS(mockHttp);
+    service = new VeryImportantServiceTS(mockHttp);
   });
 
-  describe('getRangeASAP', () => {
-    it('should emit 4 specific values', () => {
-      const scheduler = new VirtualTimeScheduler();
-
-      const range$ = service.getRangeASAP(scheduler);
-      const result = [];
-      range$.subscribe({
-        next: (value) => {
-          result.push(value);
-        }
-      });
-
-      scheduler.flush();
-      expect(result).toEqual([0, 1, 2, 3]);
-    });
-  });
-
-  describe('getData', () => {
+  describe('getData (use TestScheduler as VirtualTimeScheduler)', () => {
     it('should emit 3 specific values', () => {
-      const scheduler = new VirtualTimeScheduler();
+      const assertion = (actual, expected) => {
+        expect(actual).toEqual(expected);
+      };
+      const scheduler = new TestScheduler(assertion);
+      scheduler.maxFrames = Number.POSITIVE_INFINITY;
+
       service.http = {get: () => of(42, scheduler)};
 
       const range$ = service.getData(30, scheduler);
@@ -50,54 +39,91 @@ describe('VeryImportantServiceVTS', () => {
     });
   });
 
-  describe('watchTwoEmissions', () => {
-    it('should merge values', () => {
-      const scheduler = new VirtualTimeScheduler();
-      service.searchStringChange$ = of('value1').pipe(delay(10, scheduler));
-      service.paginationChange$ = of(1).pipe(delay(15, scheduler));
+  describe('getData (TestScheduler with marbles)', () => {
+    it('should emit 3 values', () => {
+      const assertion = (actual, expected) => {
+        expect(actual).toEqual(expected);
+      };
+      const scheduler = new TestScheduler(assertion);
+      (asyncScheduler.constructor as any).delegate = scheduler;
 
-      const range$ = service.watchTwoEmissions();
+      const marbleValues = {a: 42};
+      service.http = {get: () => scheduler.createColdObservable('(a|)', marbleValues)};
+
+      const expectedMarble = 'a-a-(a|)';
+
+      scheduler.expectObservable(service.getData(0.02)).toBe(expectedMarble, marbleValues);
+
+      scheduler.flush();
+
+      (asyncScheduler.constructor as any).delegate = undefined;
+    });
+  });
+
+  describe('getRangeASAP (with trick)', () => {
+    it('should emit 4 specific values (with trick)', () => {
+      const assertion = (actual, expected) => {
+        expect(actual).toEqual(expected);
+      };
+      const scheduler = new TestScheduler(assertion);
+      asapScheduler.schedule = scheduler.schedule.bind(
+        scheduler
+      ) as any;
+
+      const range$ = service.getRangeASAP();
       const result = [];
       range$.subscribe({
-        next: (value) => result.push(value)
+        next: (value) => {
+          result.push(value);
+        }
       });
 
       scheduler.flush();
-      expect(result).toEqual(['value1', 1]);
+      expect(result).toEqual([0, 1, 2, 3]);
+
+      delete asapScheduler.schedule;
     });
   });
 
-  describe('getSearchResults', () => {
+  describe('getRangeASAP (with trick and marbles)', () => {
+    it('should emit 4 specific values (with trick)', () => {
+      const assertion = (actual, expected) => {
+        expect(actual).toEqual(expected);
+      };
+      const scheduler = new TestScheduler(assertion);
+      asapScheduler.schedule = scheduler.schedule.bind(
+        scheduler
+      ) as any;
 
-    it('should call this.http.get and get result', () => {
-      const scheduler = new VirtualTimeScheduler();
-      const input$ = from(['aaa', 'aaab', 'aaabc']).pipe(
-        concatMap((value, index) => {
-          switch (index) {
-            case 0: // will not pass debounce
-              return of({target: {value: 'aaa'}}).pipe(delay(100, scheduler));
-            case 1: // will pass debounce
-              return of({target: {value: 'aaab'}}).pipe(delay(500, scheduler));
-            case 2: // will pass debounce
-              return of({target: {value: 'aaabc'}}).pipe(delay(2500, scheduler));
-          }
-        }));
+      const marbleValues = {a: 0, b: 1, c: 2, d: 3};
+      const expectedMarble = '(abcd|)';
 
-      const result = [];
-      service.http = {get: () => of('42', scheduler)};
-
-      const searchResults$ = service.getSearchResults(
-        input$,
-        scheduler);
-
-      searchResults$.subscribe({
-        next: (value) => {console.log('next', value); result.push(value)}
-      });
+      scheduler.expectObservable(service.getRangeASAP()).toBe(expectedMarble, marbleValues);
 
       scheduler.flush();
 
-      console.log('result ', result);
-      expect(result).toEqual(['42', '42']);
+      delete asapScheduler.schedule;
     });
   });
+
+  describe('watchTwoEmissions', () => {
+    it('should merge values emissions', () => {
+      const assertion = (actual, expected) => {
+        expect(actual).toEqual(expected);
+      };
+      const scheduler = new TestScheduler(assertion);
+      (asyncScheduler.constructor as any).delegate = scheduler;
+
+      const marbleValues = {a: 42, b: 13};
+      service.searchStringChange$ = scheduler.createColdObservable('--a--|', marbleValues);
+      service.paginationChange$ =   scheduler.createColdObservable('b--|', marbleValues);
+
+      const expectedMarble = 'b-a--|';
+
+      scheduler.expectObservable(service.watchTwoEmissions()).toBe(expectedMarble, marbleValues);
+
+      (asyncScheduler.constructor as any).delegate = undefined;
+    });
+  });
+
 });

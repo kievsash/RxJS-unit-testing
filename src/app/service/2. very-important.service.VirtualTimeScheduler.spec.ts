@@ -35,14 +35,10 @@ describe('VeryImportantServiceVTS', () => {
   describe('getRangeASAP (with trick)', () => {
     it('should emit 4 specific values (with trick)', () => {
       const virtScheduler = new VirtualTimeScheduler();
-
       asapScheduler.schedule = virtScheduler.schedule.bind(
         virtScheduler
       ) as any;
 
-      mockHttp = {get: () => of(42, virtScheduler)};
-
-      service = new VeryImportantServiceVTS(mockHttp);
       const range$ = service.getRangeASAP();
       const result = [];
       range$.subscribe({
@@ -78,9 +74,10 @@ describe('VeryImportantServiceVTS', () => {
   });
 
   describe('getData (AsyncScheduler.delegate)', () => {
+
     it('should emit 3 specific values', () => {
-      const scheduler = new VirtualTimeScheduler();
-      (asyncScheduler.constructor as any).delegate = scheduler;
+      const virtScheduler = new VirtualTimeScheduler();
+      (asyncScheduler.constructor as any).delegate = virtScheduler;
       service.http = {get: () => of(42, asyncScheduler)};
 
       const range$ = service.getData(30);
@@ -92,8 +89,9 @@ describe('VeryImportantServiceVTS', () => {
         }
       });
 
-      scheduler.flush();
+      virtScheduler.flush();
       expect(result).toEqual([42, 42, 42]);
+
       (asyncScheduler.constructor as any).delegate = undefined;
     });
   });
