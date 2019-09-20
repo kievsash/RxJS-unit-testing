@@ -2,7 +2,7 @@ import {asapScheduler, asyncScheduler, from, of, VirtualTimeScheduler} from 'rxj
 import {VeryImportantServiceTS} from './3. very-important.service.TestScheduler';
 import {TestScheduler} from 'rxjs/testing';
 
-describe('VeryImportantServiceTS (with TestScheduler.run)', () => {
+describe('VeryImportantServiceTS (with rxjs-marbles)', () => {
   let service;
   let mockHttp;
 
@@ -12,7 +12,7 @@ describe('VeryImportantServiceTS (with TestScheduler.run)', () => {
     service = new VeryImportantServiceTS(mockHttp);
   });
 
-  describe('getRangeASAP (with trick and marbles)', () => {
+  describe('getRangeASAP', () => {
     it('should emit 4 specific values (with trick)', () => {
       const assertion = (actual, expected) => {
         expect(actual).toEqual(expected);
@@ -37,23 +37,23 @@ describe('VeryImportantServiceTS (with TestScheduler.run)', () => {
     });
   });
 
-  describe('getData (TestScheduler.run with marbles)', () => {
-    it('should emit 3 values', () => {
-      const assertion = (actual, expected) => {
-        expect(actual).toEqual(expected);
-      };
-      const scheduler = new TestScheduler(assertion);
-
-      scheduler.run((helpers) =>{
-        const { cold, expectObservable } = helpers;
-        const marbleValues = {a: 42};
-        service.http = {get: () => cold('(a|)', marbleValues)};
-
-        // const expected = 'a 1000ms a 1000ms (a|)';
-        const expected = 'a 999ms a 999ms (a|)';
-
-        expectObservable(service.getData(1)).toBe(expected, marbleValues);
-      });
-    });
-  });
+  // describe('getData (TestScheduler.run with marbles)', () => {
+  //   it('should emit 3 values', () => {
+  //     const assertion = (actual, expected) => {
+  //       expect(actual).toEqual(expected);
+  //     };
+  //     const scheduler = new TestScheduler(assertion);
+  //
+  //     scheduler.run((helpers) =>{
+  //       const { cold, expectObservable } = helpers;
+  //       const marbleValues = {a: 42};
+  //       service.http = {get: () => cold('(a|)', marbleValues)};
+  //
+  //       // const expected = 'a 1000ms a 1000ms (a|)';
+  //       const expected = 'a 999ms a 999ms (a|)';
+  //
+  //       expectObservable(service.getData(1)).toBe(expected, marbleValues);
+  //     });
+  //   });
+  // });
 });
