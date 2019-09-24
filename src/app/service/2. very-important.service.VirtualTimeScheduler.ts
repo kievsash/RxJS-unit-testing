@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {asapScheduler, asyncScheduler, combineLatest, merge, of, Subject} from 'rxjs';
+import {asapScheduler, asyncScheduler, combineLatest, from, merge, of, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {debounceTime, delay, distinctUntilChanged, filter, map, repeatWhen, switchMap, take} from 'rxjs/operators';
+import {debounceTime, delay, distinctUntilChanged, filter, map, observeOn, repeatWhen, switchMap, take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,7 @@ export class VeryImportantServiceVTS {
   }
 
   getRangeASAP(scheduler = asapScheduler) {
-    console.log('(asapScheduler.constructor as any).delegate ', (asapScheduler.constructor as any).delegate)
-    return of(0, 1, 2, 3, scheduler); // emits 0..1..2..3
+    return from([0, 1, 2, 3]).pipe(observeOn(scheduler)); // emits 0..1..2..3
   }
 
   getData(timeSec, scheduler = asyncScheduler) {

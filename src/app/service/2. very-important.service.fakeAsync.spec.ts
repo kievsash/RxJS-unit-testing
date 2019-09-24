@@ -26,7 +26,7 @@ describe('VeryImportantServiceTS (with rxjs-marbles)', () => {
   });
 
   describe('getRangeASAP', () => {
-    it('should emit 4 specific values (with trick)', fakeAsync(() => {
+    it('should emit 4 specific values (fakeAsync)', fakeAsync(() => {
 
       const range$ = service.getRangeASAP();
       const result = [];
