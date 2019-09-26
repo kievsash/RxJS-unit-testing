@@ -1,10 +1,12 @@
-import {asapScheduler, asyncScheduler, from, of} from 'rxjs';
+import {asapScheduler, asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
 import {VeryImportantServiceTS} from './3. very-important.service.TestScheduler';
-import {marbles} from 'rxjs-marbles/jasmine';
+import {cases, marbles, observe} from 'rxjs-marbles/jasmine';
 import {fakeSchedulers} from 'rxjs-marbles/jasmine/angular';
 import {timeRange} from 'rxjs-toolbox';
-import {fakeAsync, flushMicrotasks, tick} from '@angular/core/testing';
-import {concatMap, delay} from 'rxjs/operators';
+import {tick} from '@angular/core/testing';
+import {getTestScheduler} from 'jasmine-marbles';
+import {skip, startWith, tap, toArray} from 'rxjs/operators';
+
 
 describe('VeryImportantServiceTS (with rxjs-marbles)', () => {
   let service;
@@ -25,7 +27,6 @@ describe('VeryImportantServiceTS (with rxjs-marbles)', () => {
         m.expect(service.getRangeASAP()).toBeObservable(expectedMarble, marbleValues);
       })
     );
-
   });
 
   describe('getData (rxjs-marbles with marbles)', () => {
@@ -75,11 +76,41 @@ describe('VeryImportantServiceTS (with rxjs-marbles)', () => {
       expect(result).toEqual([0, 1, 2, 3]);
     }));
   });
-  describe('(rxjs-marbles cases)', () => {
 
+  describe('getData (rxjs-marbles with cases)', () => {
+
+    cases('should emit 3 value', (marble, caseData) => {
+
+      const marbleValues = {a: 42};
+      service.http = {get: () => marble.cold(caseData.mockNet, marbleValues)};
+
+      marble.expect(service.getData(1)).toBeObservable(caseData.expected, marbleValues);
+
+    }, {
+      'no-delay network response': {
+        mockNet: '(a|)',
+        expected: 'a 999ms a 999ms (a|)'
+      },
+      '5ms delay network response': {
+        mockNet: '5ms (a|)',
+        expected: '5ms a 1004ms a 1004ms (a|)'
+      },
+    });
   });
 
   describe('(rxjs-marbles observe)', () => {
 
+    it('should call this.http.get twice and get result twice',
+      observe(() => {
+
+        service.http = {get: () => of(42, asyncScheduler)};
+
+        return service.getData(0.01)
+          .pipe(
+            toArray(),
+            tap((result) => expect(result).toEqual([42, 42, 42]))
+          );
+      })
+    );
   });
 });

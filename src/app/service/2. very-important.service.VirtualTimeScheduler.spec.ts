@@ -4,6 +4,7 @@ import {asapScheduler, asyncScheduler, from, of, VirtualTimeScheduler} from 'rxj
 import {concatMap, delay, switchMap} from 'rxjs/operators';
 import {AsapScheduler} from 'rxjs/internal/scheduler/AsapScheduler';
 import {VeryImportantServiceVTS} from './2. very-important.service.VirtualTimeScheduler';
+import {timeRange} from 'rxjs-toolbox';
 
 describe('VeryImportantServiceVTS', () => {
   let service;
@@ -115,19 +116,14 @@ describe('VeryImportantServiceVTS', () => {
 
   describe('getSearchResults', () => {
 
-    it('should call this.http.get and get result', () => {
+    it('should call this.http.get twice and get result twice', () => {
       const scheduler = new VirtualTimeScheduler();
-      const input$ = from(['aaa', 'aaab', 'aaabc']).pipe(
-        concatMap((value, index) => {
-          switch (index) {
-            case 0: // will not pass debounce
-              return of({target: {value: 'aaa'}}).pipe(delay(100, scheduler));
-            case 1: // will pass debounce
-              return of({target: {value: 'aaab'}}).pipe(delay(500, scheduler));
-            case 2: // will pass debounce
-              return of({target: {value: 'aaabc'}}).pipe(delay(2500, scheduler));
-          }
-        }));
+      const input$ = timeRange([
+        {value: {target: {value: 'aaa'}}, delay: 100},
+        {value: {target: {value: 'aaab'}}, delay: 500},
+        {value: {target: {value: 'aaabc'}}, delay: 1500},
+      ], true);
+      (asyncScheduler.constructor as any).delegate = scheduler;
 
       const result = [];
       service.http = {get: () => of('42', scheduler)};
@@ -143,6 +139,8 @@ describe('VeryImportantServiceVTS', () => {
       scheduler.flush();
 
       expect(result).toEqual(['42', '42']);
+      (asyncScheduler.constructor as any).delegate = undefined;
+
     });
   });
 });
