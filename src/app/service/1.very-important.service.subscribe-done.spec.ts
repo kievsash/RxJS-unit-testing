@@ -1,5 +1,5 @@
 import {TestBed} from '@angular/core/testing';
-
+import {timeRange} from 'rxjs-toolbox';
 import {asyncScheduler, from, of, Subject} from 'rxjs';
 import {concatMap, delay, switchMap} from 'rxjs/operators';
 import {VeryImportantService} from './1.very-important.service';
@@ -68,17 +68,13 @@ describe('VeryImportantService', () => {
 
   describe('getSearchResults', () => {
     it('should call this.http.get and get result', (done) => {
-      const input$ = from(['aaa', 'aaab', 'aaabc']).pipe(
-        concatMap((value, index) => {
-          switch (index) {
-            case 0: // will not pass debounce
-              return of({target: {value: 'aaa'}}).pipe(delay(1));
-            case 1: // will pass debounce
-              return of({target: {value: 'aaab'}}).pipe(delay(5));
-            case 2: // will pass debounce
-              return of({target: {value: 'aaabc'}}).pipe(delay(30));
-          }
-        }));
+
+      const input$ = timeRange([
+        {value: {target: {value: 'aaa'}}, delay: 1},
+        {value: {target: {value: 'aaab'}}, delay: 5},
+        {value: {target: {value: 'aaabc'}}, delay: 30},
+      ], true);
+
       const debounceTimingMs = 15;
       const result = [];
       service.http = {get: () => of('42', asyncScheduler)};
