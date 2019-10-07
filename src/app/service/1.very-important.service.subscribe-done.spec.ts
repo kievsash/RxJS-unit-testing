@@ -3,6 +3,8 @@ import {timeRange} from 'rxjs-toolbox';
 import {asyncScheduler, from, of, Subject} from 'rxjs';
 import {concatMap, delay, switchMap} from 'rxjs/operators';
 import {VeryImportantService} from './1.very-important.service';
+import {VeryImportantServiceTS} from './3. very-important.service.TestScheduler';
+import {HttpClient} from '@angular/common/http';
 
 describe('VeryImportantService', () => {
   let service;
@@ -11,7 +13,13 @@ describe('VeryImportantService', () => {
   beforeEach(() => {
     mockHttp = {get: () => of(42, asyncScheduler)};
 
-    service = new VeryImportantService(mockHttp);
+    service = new VeryImportantServiceTS(mockHttp);
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: HttpClient, useValue: mockHttp}
+      ]
+    });
+    service = TestBed.get(VeryImportantServiceTS);
   });
 
   describe('getRangeASAP', () => {
