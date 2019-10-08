@@ -9,7 +9,7 @@ describe('VeryImportantService', () => {
   let mockHttp;
 
   beforeEach(() => {
-
+    mockHttp = {get: () => of(42, asyncScheduler)};
     service = new VeryImportantService(mockHttp);
     TestBed.configureTestingModule({
       providers: [
