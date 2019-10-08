@@ -1,19 +1,25 @@
 import {TestBed} from '@angular/core/testing';
 
-import {asapScheduler, asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
-import {concatMap, delay, switchMap} from 'rxjs/operators';
-import {AsapScheduler} from 'rxjs/internal/scheduler/AsapScheduler';
+import { asyncScheduler, of, VirtualTimeScheduler} from 'rxjs';
+import {delay} from 'rxjs/operators';
 import {VeryImportantServiceVTS} from './2. very-important.service.VirtualTimeScheduler';
 import {timeRange} from 'rxjs-toolbox';
+import {VeryImportantService} from './1.very-important.service';
+import {HttpClient} from '@angular/common/http';
 
 describe('VeryImportantServiceVTS', () => {
   let service;
   let mockHttp;
 
   beforeEach(() => {
+    service = new VeryImportantService(mockHttp);
     mockHttp = {get: () => of(42, asyncScheduler)};
-
-    service = new VeryImportantServiceVTS(mockHttp);
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: HttpClient, useValue: mockHttp}
+      ]
+    });
+    service = TestBed.get(VeryImportantServiceVTS);
   });
 
   describe('getRangeASAP', () => {
@@ -36,9 +42,7 @@ describe('VeryImportantServiceVTS', () => {
   describe('getRangeASAP (with trick)', () => {
     it('should emit 4 specific values (with trick)', () => {
       const virtScheduler = new VirtualTimeScheduler();
-      asapScheduler.schedule = virtScheduler.schedule.bind(
-        virtScheduler
-      ) as any;
+      (asyncScheduler.constructor as any).delegate = virtScheduler;
 
       const range$ = service.getRangeASAP();
       const result = [];
@@ -51,7 +55,7 @@ describe('VeryImportantServiceVTS', () => {
       virtScheduler.flush();
       expect(result).toEqual([0, 1, 2, 3]);
 
-      delete asapScheduler.schedule;
+      (asyncScheduler.constructor as any).delegate = undefined;
     });
   });
 
@@ -128,7 +132,7 @@ describe('VeryImportantServiceVTS', () => {
       const result = [];
       service.http = {get: () => of('42', scheduler)};
 
-      const searchResults$ = service.getSearchResults(input$, scheduler);
+      const searchResults$ = service.getSearchResults(input$);
 
       searchResults$.subscribe({
         next: (value) => {

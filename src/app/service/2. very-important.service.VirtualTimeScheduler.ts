@@ -15,7 +15,7 @@ export class VeryImportantServiceVTS {
   }
 
   getRangeASAP(scheduler = asapScheduler) {
-    return from([0, 1, 2, 3]).pipe(observeOn(scheduler)); // emits 0..1..2..3
+    return from([0, 1, 2, 3], scheduler); // emits 0..1..2..3
   }
 
   getData(timeSec, scheduler = asyncScheduler) {
