@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {asapScheduler, merge, of, Subject} from 'rxjs';
+import {asapScheduler, asyncScheduler, merge, of, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {delay, repeatWhen, take} from 'rxjs/operators';
+import {debounceTime, delay, distinctUntilChanged, filter, map, repeatWhen, switchMap, take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,16 @@ export class VeryImportantService {
     return merge(
       this.searchStringChange$,
       this.paginationChange$
+    );
+  }
+
+  getSearchResults(input$, timeout = 750, scheduler = asyncScheduler) {
+    return input$.pipe(
+      map((e: Event) => (e.target as HTMLInputElement).value),
+      filter((text: string) => text.length > 2),
+      debounceTime(timeout, scheduler),
+      distinctUntilChanged(),
+      switchMap((text) => this.http.get('url?search=' + text))
     );
   }
 
