@@ -124,6 +124,8 @@ describe('VeryImportantService - with TestScheduler', () => {
 
       scheduler.expectObservable(service.watchTwoEmissions()).toBe(expectedMarble, marbleValues);
 
+      scheduler.flush();
+
       (asyncScheduler.constructor as any).delegate = undefined;
     });
   });
