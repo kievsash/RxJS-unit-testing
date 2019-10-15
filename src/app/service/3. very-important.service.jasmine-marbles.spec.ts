@@ -1,8 +1,6 @@
 
-import {asapScheduler, asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
-import {concatMap, delay, switchMap} from 'rxjs/operators';
+import {asyncScheduler, of} from 'rxjs';
 import {VeryImportantServiceTS} from './3. very-important.service.TestScheduler';
-import {TestScheduler} from 'rxjs/testing';
 import { getTestScheduler, cold } from 'jasmine-marbles';
 
 describe('VeryImportantServiceTS (with jasmine-marbles)', () => {
