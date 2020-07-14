@@ -14,6 +14,10 @@ export class VeryImportantService {
   constructor(private http: HttpClient) {
   }
 
+  getRange() {
+    return of(0, 1, 2, 3, asyncScheduler); // emits 0..1..2..3
+  }
+
   getRangeASAP() {
     return of(0, 1, 2, 3, asapScheduler); // emits 0..1..2..3
   }

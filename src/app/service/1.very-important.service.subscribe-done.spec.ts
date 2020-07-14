@@ -19,6 +19,23 @@ describe('VeryImportantService', () => {
     service = TestBed.get(VeryImportantService);
   });
 
+  describe('getRange (with AsyncScheduler)', () => {
+    it('should emit 4 specific values', (done) => {
+      const range$ = service.getRange();
+
+      const result = [];
+      range$.subscribe({
+        next: (value) => {
+          result.push(value);
+        },
+        complete: () => {
+          expect(result).toEqual([0, 1, 2, 3]);
+          done();
+        }
+      });
+    });
+  });
+
   describe('getRangeASAP', () => {
     it('should emit 4 specific values', (done) => {
       const range$ = service.getRangeASAP();
