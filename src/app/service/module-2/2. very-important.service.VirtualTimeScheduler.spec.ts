@@ -4,7 +4,7 @@ import { asyncScheduler, of, VirtualTimeScheduler} from 'rxjs';
 import {delay} from 'rxjs/operators';
 import {VeryImportantServiceVTS} from './2. very-important.service.VirtualTimeScheduler';
 import {timeRange} from 'rxjs-toolbox';
-import {VeryImportantService} from './1.very-important.service';
+import {VeryImportantService} from '../module-1/1.very-important.service';
 import {HttpClient} from '@angular/common/http';
 
 describe('VeryImportantServiceVTS', () => {

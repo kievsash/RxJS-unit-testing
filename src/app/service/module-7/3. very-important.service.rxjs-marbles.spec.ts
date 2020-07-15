@@ -1,5 +1,5 @@
 import {asapScheduler, asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
-import {VeryImportantServiceTS} from './3. very-important.service.TestScheduler';
+import {VeryImportantServiceTS} from '../module-4/3. very-important.service.TestScheduler';
 import {cases, marbles, observe} from 'rxjs-marbles/jasmine';
 import {fakeSchedulers} from 'rxjs-marbles/jasmine/angular';
 import {timeRange} from 'rxjs-toolbox';

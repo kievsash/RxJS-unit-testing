@@ -1,5 +1,5 @@
 import {asyncScheduler, of} from 'rxjs';
-import {VeryImportantServiceTS} from './3. very-important.service.TestScheduler';
+import {VeryImportantServiceTS} from '../module-4/3. very-important.service.TestScheduler';
 import {TestScheduler} from 'rxjs/testing';
 
 describe('VeryImportantServiceTS (with TestScheduler.run)', () => {

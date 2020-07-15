@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 
 import {asyncScheduler, of} from 'rxjs';
 import {TestScheduler} from 'rxjs/testing';
-import {VeryImportantService} from './1.very-important.service';
+import {VeryImportantService} from '../module-1/1.very-important.service';
 import {HttpClient} from '@angular/common/http';
 import {VeryImportantServiceTS} from './3. very-important.service.TestScheduler';
 

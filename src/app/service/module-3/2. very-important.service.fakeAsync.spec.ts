@@ -2,7 +2,7 @@ import {asyncScheduler, of} from 'rxjs';
 import {fakeAsync, flushMicrotasks, TestBed, tick} from '@angular/core/testing';
 import {HttpClient} from '@angular/common/http';
 import {timeRange} from 'rxjs-toolbox';
-import {VeryImportantService} from './1.very-important.service';
+import {VeryImportantService} from '../module-1/1.very-important.service';
 
 describe('VeryImportantService (with fakeAsync)', () => {
   let service;
