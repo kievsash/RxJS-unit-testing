@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 
 import { asyncScheduler, of, VirtualTimeScheduler} from 'rxjs';
 import {delay} from 'rxjs/operators';
-import {VeryImportantServiceVTS} from '../2. very-important.service.VirtualTimeScheduler';
+import {VeryImportantServiceVTS} from '../mine_services/2. very-important.service.VirtualTimeScheduler';
 import {timeRange} from 'rxjs-toolbox';
 import {HttpClient} from '@angular/common/http';
 
