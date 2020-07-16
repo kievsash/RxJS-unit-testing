@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 import {asyncScheduler, of} from 'rxjs';
 import {delay} from 'rxjs/operators';
-import {VeryImportantService} from './1.very-important.service';
+import {VeryImportantService} from '../1. very-important.service';
 import {HttpClient} from '@angular/common/http';
 
 describe('Module-1: subscribe + jasmine done', () => {

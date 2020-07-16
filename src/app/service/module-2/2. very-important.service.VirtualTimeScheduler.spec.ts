@@ -2,9 +2,8 @@ import {TestBed} from '@angular/core/testing';
 
 import { asyncScheduler, of, VirtualTimeScheduler} from 'rxjs';
 import {delay} from 'rxjs/operators';
-import {VeryImportantServiceVTS} from './2. very-important.service.VirtualTimeScheduler';
+import {VeryImportantServiceVTS} from '../2. very-important.service.VirtualTimeScheduler';
 import {timeRange} from 'rxjs-toolbox';
-import {VeryImportantService} from '../module-1/1.very-important.service';
 import {HttpClient} from '@angular/common/http';
 
 describe('Module 2: VirtualTimeScheduler', () => {
@@ -12,14 +11,13 @@ describe('Module 2: VirtualTimeScheduler', () => {
   let mockHttp;
 
   beforeEach(() => {
-    service = new VeryImportantService(mockHttp);
     mockHttp = {get: () => of(42, asyncScheduler)};
     TestBed.configureTestingModule({
       providers: [
         {provide: HttpClient, useValue: mockHttp}
       ]
     });
-    service = TestBed.get(VeryImportantServiceVTS);
+    service = TestBed.inject(VeryImportantServiceVTS);
   });
 
   describe('getRangeASAP', () => {

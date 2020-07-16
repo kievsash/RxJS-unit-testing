@@ -2,23 +2,21 @@ import {TestBed} from '@angular/core/testing';
 
 import {asyncScheduler, of} from 'rxjs';
 import {TestScheduler} from 'rxjs/testing';
-import {VeryImportantService} from '../module-1/1.very-important.service';
 import {HttpClient} from '@angular/common/http';
-import {VeryImportantServiceTS} from './4. very-important.service.TestScheduler';
+import {VeryImportantServiceTS} from '../4. very-important.service.TestScheduler';
 
 describe('Module-4: VeryImportantService - with TestScheduler', () => {
   let service;
   let mockHttp;
 
   beforeEach(() => {
-    service = new VeryImportantService(mockHttp);
     mockHttp = {get: () => of(42, asyncScheduler)};
     TestBed.configureTestingModule({
       providers: [
         {provide: HttpClient, useValue: mockHttp}
       ]
     });
-    service = TestBed.get(VeryImportantServiceTS);
+    service = TestBed.inject(VeryImportantServiceTS);
   });
 
   describe('getData (use TestScheduler as VirtualTimeScheduler)', () => {
