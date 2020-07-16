@@ -4,9 +4,9 @@ import {asyncScheduler, of} from 'rxjs';
 import {TestScheduler} from 'rxjs/testing';
 import {VeryImportantService} from '../module-1/1.very-important.service';
 import {HttpClient} from '@angular/common/http';
-import {VeryImportantServiceTS} from './3. very-important.service.TestScheduler';
+import {VeryImportantServiceTS} from './4. very-important.service.TestScheduler';
 
-describe('VeryImportantService - with TestScheduler', () => {
+describe('Module-4: VeryImportantService - with TestScheduler', () => {
   let service;
   let mockHttp;
 

@@ -1,9 +1,9 @@
 
 import {asyncScheduler, of} from 'rxjs';
-import {VeryImportantServiceTS} from '../module-4/3. very-important.service.TestScheduler';
+import {VeryImportantServiceTS} from '../module-4/4. very-important.service.TestScheduler';
 import { getTestScheduler, cold } from 'jasmine-marbles';
 
-describe('VeryImportantServiceTS (with jasmine-marbles)', () => {
+describe('Module 5: VeryImportantServiceTS (with jasmine-marbles)', () => {
   let service;
   let mockHttp;
 

@@ -4,7 +4,7 @@ import {delay} from 'rxjs/operators';
 import {VeryImportantService} from './1.very-important.service';
 import {HttpClient} from '@angular/common/http';
 
-describe('VeryImportantService', () => {
+describe('Module-1: subscribe + jasmine done', () => {
   let service;
   let mockHttp;
 

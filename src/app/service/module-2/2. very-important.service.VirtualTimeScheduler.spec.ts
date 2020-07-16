@@ -7,7 +7,7 @@ import {timeRange} from 'rxjs-toolbox';
 import {VeryImportantService} from '../module-1/1.very-important.service';
 import {HttpClient} from '@angular/common/http';
 
-describe('VeryImportantServiceVTS', () => {
+describe('Module 2: VirtualTimeScheduler', () => {
   let service;
   let mockHttp;
 

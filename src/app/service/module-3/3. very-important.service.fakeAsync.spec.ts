@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {timeRange} from 'rxjs-toolbox';
 import {VeryImportantService} from '../module-1/1.very-important.service';
 
-describe('VeryImportantService (with fakeAsync)', () => {
+describe('Module 3: VeryImportantService (with fakeAsync)', () => {
   let service;
   let mockHttp;
 

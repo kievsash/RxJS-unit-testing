@@ -1,14 +1,13 @@
-import {asapScheduler, asyncScheduler, from, of, VirtualTimeScheduler} from 'rxjs';
-import {VeryImportantServiceTS} from '../module-4/3. very-important.service.TestScheduler';
+import {asyncScheduler, of} from 'rxjs';
+import {VeryImportantServiceTS} from '../module-4/4. very-important.service.TestScheduler';
 import {cases, marbles, observe} from 'rxjs-marbles/jasmine';
 import {fakeSchedulers} from 'rxjs-marbles/jasmine/angular';
 import {timeRange} from 'rxjs-toolbox';
 import {tick} from '@angular/core/testing';
-import {getTestScheduler} from 'jasmine-marbles';
-import {skip, startWith, tap, toArray} from 'rxjs/operators';
+import {tap, toArray} from 'rxjs/operators';
 
 
-describe('VeryImportantServiceTS (with rxjs-marbles)', () => {
+describe('Module 7: VeryImportantServiceTS (with rxjs-marbles)', () => {
   let service;
   let mockHttp;
 
