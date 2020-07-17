@@ -4,84 +4,61 @@ import {HttpClient} from '@angular/common/http';
 import {timeRange} from 'rxjs-toolbox';
 import {VeryImportantService} from '../mine_services/1. very-important.service';
 
-describe('Module 3: VeryImportantService (with fakeAsync)', () => {
+xdescribe('Module 3: VeryImportantService (with fakeAsync)', () => {
   let service;
   let mockHttp;
 
   beforeEach(() => {
     mockHttp = {get: () => of(42, asyncScheduler)};
 
-    service = new VeryImportantService(mockHttp);
     TestBed.configureTestingModule({
       providers: [
         {provide: HttpClient, useValue: mockHttp}
       ]
     });
-    service = TestBed.get(VeryImportantService);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+    service = TestBed.inject(VeryImportantService);
   });
 
   describe('getRangeASAP', () => {
     it('should emit 4 specific values (fakeAsync)', fakeAsync(() => {
+      // call service.getRangeASAP(30);
+      // subscribe to result observable
+      // grab all the values to array
+      // make a flushMicrotasks() run
+      // check array result with expect()
 
-      const range$ = service.getRangeASAP();
-      const result = [];
-      range$.subscribe({
-        next: (value) => {
-          result.push(value);
-        }
-      });
-
-      flushMicrotasks();
-      expect(result).toEqual([0, 1, 2, 3]);
     }));
   });
 
   describe('getData', () => {
     it('should emit 3 specific values', fakeAsync(() => {
+      // call service.getData(30);
+      // subscribe to result observable
+      // grab all the values to array
+      // make a tick(60*1000+5) ms (+5ms for stability)
+      // check array result with expect()
 
-      const range$ = service.getData(30);
-      const result = [];
 
-      range$.subscribe({
-        next: (value) => {
-          result.push(value);
-        }
-      });
-
-      tick(60005);
-      // 60000 = value + 30000ms + value + 30000ms + value + 5ms(to be sure)
-
-      expect(result).toEqual([42, 42, 42]);
     }));
   });
 
   describe('getSearchResults', () => {
 
     it('should call this.http.get and get result', fakeAsync(() => {
+      // user input emulation observable
       const input$ = timeRange([
         {value: {target: {value: 'aaa'}}, delay: 100},
         {value: {target: {value: 'aaab'}}, delay: 500},
         {value: {target: {value: 'aaabc'}}, delay: 2500},
       ], true);
-
-      const result = [];
       service.http = {get: () => of('42', asyncScheduler)};
 
-      const searchResults$ = service.getSearchResults(input$);
+      // call service.getSearchResults(input$);
+      // subscribe to result observable
+      // grab all the values to array
+      // make a tick(3500) ms (more than 100+500+2500)
+      // check array result with expect()
 
-      searchResults$.subscribe({
-        next: (value) => {
-          result.push(value);
-        }
-      });
-
-      tick(3500);
-
-      expect(result).toEqual(['42', '42']);
     }));
   });
 });
