@@ -3,7 +3,7 @@ import {TestBed} from '@angular/core/testing';
 import {asyncScheduler, of} from 'rxjs';
 import {TestScheduler} from 'rxjs/testing';
 import {HttpClient} from '@angular/common/http';
-import {VeryImportantServiceTS} from '../mine_services/4. very-important.service.TestScheduler';
+import {VeryImportantServiceTS} from '../mine_services/3. very-important.service.TestScheduler';
 
 xdescribe('Module-4: VeryImportantService - with TestScheduler', () => {
   let service;
@@ -25,19 +25,15 @@ xdescribe('Module-4: VeryImportantService - with TestScheduler', () => {
       const assertion = (actual, expected) => {
         expect(actual).toEqual(expected);
       };
-      const scheduler = new TestScheduler(assertion);
-      (asyncScheduler.constructor as any).delegate = scheduler;
 
-      const marbleValues = {a: 42};
-      service.http = {get: () => scheduler.createColdObservable('(a|)', marbleValues)};
+      // create TestScheduler instance
+      // assign it to (asyncScheduler.constructor as any).delegate
+      // mock service.http with scheduler.createColdObservable function
+      // expectedMarble = 'a-a-(a|)';
+      // use scheduler.expectObservable for assertion
+      // call scheduler.flush
+      // do not forget to a assign as (asyncScheduler as any).constructor.delegate = undefined
 
-      const expectedMarble = 'a-a-(a|)';
-
-      scheduler.expectObservable(service.getData(0.02)).toBe(expectedMarble, marbleValues);
-
-      scheduler.flush();
-
-      (asyncScheduler.constructor as any).delegate = undefined;
     });
   });
 
@@ -46,17 +42,15 @@ xdescribe('Module-4: VeryImportantService - with TestScheduler', () => {
       const assertion = (actual, expected) => {
         expect(actual).toEqual(expected);
       };
-      const scheduler = new TestScheduler(assertion);
-      (asyncScheduler as any).constructor.delegate = scheduler;
+      // create TestScheduler instance
+      // assign it to (asyncScheduler.constructor as any).delegate
+      // const marbleValues = {a: 0, b: 1, c: 2, d: 3};
+      // const expectedMarble = '(abcd|)';
+      // use scheduler.expectObservable for assertion
+      // call scheduler.flush
+      // do not forget to a assign as (asyncScheduler as any).constructor.delegate = undefined
 
-      const marbleValues = {a: 0, b: 1, c: 2, d: 3};
-      const expectedMarble = '(abcd|)';
 
-      scheduler.expectObservable(service.getRangeASAP()).toBe(expectedMarble, marbleValues);
-
-      scheduler.flush();
-
-      (asyncScheduler as any).constructor.delegate = undefined;
     });
   });
 
@@ -65,20 +59,16 @@ xdescribe('Module-4: VeryImportantService - with TestScheduler', () => {
       const assertion = (actual, expected) => {
         expect(actual).toEqual(expected);
       };
-      const scheduler = new TestScheduler(assertion);
-      (asyncScheduler.constructor as any).delegate = scheduler;
 
-      const marbleValues = {a: 42, b: 13};
-      service.searchStringChange$ = scheduler.createColdObservable('--a--|', marbleValues);
-      service.paginationChange$ = scheduler.createColdObservable('b--|', marbleValues);
+      // create TestScheduler instance
+      // assign it to (asyncScheduler.constructor as any).delegate
+      // mock service.searchStringChange$ as scheduler.createColdObservable('--a--|', marbleValues)
+      // mock service.paginationChange$ as scheduler.createColdObservable('b--|', marbleValues
+      //  expectedMarble = 'b-a--|';
+      // use scheduler.expectObservable for assertion
+      // call scheduler.flush
+      // do not forget to a assign as (asyncScheduler as any).constructor.delegate = undefined
 
-      const expectedMarble = 'b-a--|';
-
-      scheduler.expectObservable(service.watchTwoEmissions()).toBe(expectedMarble, marbleValues);
-
-      scheduler.flush();
-
-      (asyncScheduler.constructor as any).delegate = undefined;
     });
   });
 

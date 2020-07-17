@@ -3,7 +3,7 @@ import {TestBed} from '@angular/core/testing';
 import {asyncScheduler, of} from 'rxjs';
 import {TestScheduler} from 'rxjs/testing';
 import {HttpClient} from '@angular/common/http';
-import {VeryImportantServiceTS} from '../mine_services/4. very-important.service.TestScheduler';
+import {VeryImportantServiceTS} from '../mine_services/3. very-important.service.TestScheduler';
 
 xdescribe('Module-4: VeryImportantService - with TestScheduler', () => {
   let service;
