@@ -16,7 +16,7 @@ describe('Module-1: subscribe + jasmine done', () => {
         {provide: HttpClient, useValue: mockHttp}
       ]
     });
-    service = TestBed.get(VeryImportantService);
+    service = TestBed.inject(VeryImportantService);
   });
 
   describe('getRange (with AsyncScheduler)', () => {

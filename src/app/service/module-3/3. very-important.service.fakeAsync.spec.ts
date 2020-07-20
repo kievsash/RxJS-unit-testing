@@ -11,17 +11,12 @@ describe('Module 3: VeryImportantService (with fakeAsync)', () => {
   beforeEach(() => {
     mockHttp = {get: () => of(42, asyncScheduler)};
 
-    service = new VeryImportantService(mockHttp);
     TestBed.configureTestingModule({
       providers: [
         {provide: HttpClient, useValue: mockHttp}
       ]
     });
-    service = TestBed.get(VeryImportantService);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+    service = TestBed.inject(VeryImportantService);
   });
 
   describe('getRangeASAP', () => {
@@ -79,7 +74,7 @@ describe('Module 3: VeryImportantService (with fakeAsync)', () => {
         }
       });
 
-      tick(3500);
+      tick(3500); // 100+500+2500+someValue
 
       expect(result).toEqual(['42', '42']);
     }));

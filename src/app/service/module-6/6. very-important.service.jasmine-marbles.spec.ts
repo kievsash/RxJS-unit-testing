@@ -1,5 +1,5 @@
 import {asyncScheduler, of} from 'rxjs';
-import {VeryImportantServiceTS} from '../mine_services/4. very-important.service.TestScheduler';
+import {VeryImportantServiceTS} from '../mine_services/3. very-important.service.TestScheduler';
 import { getTestScheduler, cold } from 'jasmine-marbles';
 
 describe('Module 5: VeryImportantServiceTS (with jasmine-marbles)', () => {
@@ -12,7 +12,7 @@ describe('Module 5: VeryImportantServiceTS (with jasmine-marbles)', () => {
     service = new VeryImportantServiceTS(mockHttp);
   });
 
-  describe('getData (TestScheduler with marbles)', () => {
+  describe('getData (jasmine-marbles)', () => {
     it('should emit 3 values', () => {
 
       (asyncScheduler.constructor as any).delegate = getTestScheduler();

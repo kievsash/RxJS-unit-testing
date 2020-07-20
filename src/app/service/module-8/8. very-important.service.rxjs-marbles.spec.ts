@@ -1,5 +1,5 @@
 import {asyncScheduler, of} from 'rxjs';
-import {VeryImportantServiceTS} from '../mine_services/4. very-important.service.TestScheduler';
+import {VeryImportantServiceTS} from '../mine_services/3. very-important.service.TestScheduler';
 import {cases, marbles, observe} from 'rxjs-marbles/jasmine';
 import {fakeSchedulers} from 'rxjs-marbles/jasmine/angular';
 import {timeRange} from 'rxjs-toolbox';
@@ -28,7 +28,7 @@ describe('Module 7: VeryImportantServiceTS (with rxjs-marbles)', () => {
     );
   });
 
-  describe('getData (rxjs-marbles with marbles)', () => {
+  describe('getData (rxjs-marbles)', () => {
     it('should emit 3 values', marbles((m) => {
         const marbleValues = {a: 42};
         service.http = {get: () => m.cold('(a|)', marbleValues)};
@@ -40,40 +40,6 @@ describe('Module 7: VeryImportantServiceTS (with rxjs-marbles)', () => {
 
       })
     );
-  });
-
-  describe('getSearchResults (rxjs-marbles fakeSchedulers)', () => {
-
-    it('should call this.http.get and get result', fakeSchedulers(() => {
-      const input$ = timeRange([
-        {value: {target: {value: 'aaa'}}, delay: 100},
-        {value: {target: {value: 'aaab'}}, delay: 500},
-        {value: {target: {value: 'aaabc'}}, delay: 1500},
-      ], true);
-
-      const result = [];
-      service.http = {get: () => of('42', asyncScheduler)};
-
-      const searchResults$ = service.getSearchResults(input$);
-
-      searchResults$.subscribe((value) => result.push(value));
-
-      tick(3500);
-
-      expect(result).toEqual(['42', '42']);
-    }));
-  });
-
-  describe('getRangeASAP (asapScheduler test with rxjs-marbles fakeSchedulers)', () => {
-    it('should emit 4 specific values (fakeAsync)', fakeSchedulers(() => {
-
-      const range$ = service.getRangeASAP();
-      const result = [];
-      range$.subscribe((value) => result.push(value));
-
-      tick(1);
-      expect(result).toEqual([0, 1, 2, 3]);
-    }));
   });
 
   describe('getData (rxjs-marbles with cases)', () => {
@@ -112,4 +78,40 @@ describe('Module 7: VeryImportantServiceTS (with rxjs-marbles)', () => {
       })
     );
   });
+
+  // homework
+  xdescribe('getSearchResults (rxjs-marbles fakeSchedulers)', () => {
+
+    it('should call this.http.get and get result', fakeSchedulers(() => {
+      const input$ = timeRange([
+        {value: {target: {value: 'aaa'}}, delay: 100},
+        {value: {target: {value: 'aaab'}}, delay: 500},
+        {value: {target: {value: 'aaabc'}}, delay: 1500},
+      ], true);
+
+      const result = [];
+      service.http = {get: () => of('42', asyncScheduler)};
+
+      const searchResults$ = service.getSearchResults(input$);
+
+      searchResults$.subscribe((value) => result.push(value));
+
+      tick(3500);
+
+      expect(result).toEqual(['42', '42']);
+    }));
+  });
+
+  xdescribe('getRangeASAP (asapScheduler test with rxjs-marbles fakeSchedulers)', () => {
+    it('should emit 4 specific values (fakeAsync)', fakeSchedulers(() => {
+
+      const range$ = service.getRangeASAP();
+      const result = [];
+      range$.subscribe((value) => result.push(value));
+
+      tick(1);
+      expect(result).toEqual([0, 1, 2, 3]);
+    }));
+  });
+
 });
