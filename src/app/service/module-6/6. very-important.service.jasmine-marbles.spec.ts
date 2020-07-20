@@ -12,7 +12,7 @@ xdescribe('Module 5: VeryImportantServiceTS (with jasmine-marbles)', () => {
     service = new VeryImportantServiceTS(mockHttp);
   });
 
-  describe('getData (TestScheduler with marbles)', () => {
+  describe('getData (jasmine-marbles)', () => {
     it('should emit 3 values', () => {
 
       // get TestScheduler instance from jasmine-mabrles with getTestScheduler()
@@ -25,7 +25,7 @@ xdescribe('Module 5: VeryImportantServiceTS (with jasmine-marbles)', () => {
     });
   });
 
-  describe('watchTwoEmissions', () => {
+  describe('watchTwoEmissions (jasmine-marbles)', () => {
     it('should merge values emissions', () => {
 
       // get TestScheduler instance from jasmine-mabrles with getTestScheduler()

@@ -38,7 +38,7 @@ xdescribe('Module-4: VeryImportantService - with TestScheduler', () => {
     });
   });
 
-  describe('getRangeASAP (with trick)', () => {
+  describe('getRangeASAP (use TestScheduler as VirtualTimeScheduler, with .delegate trick)', () => {
     it('should emit 4 specific values (with trick)', () => {
       const assertion = (actual, expected) => {
         expect(actual).toEqual(expected);

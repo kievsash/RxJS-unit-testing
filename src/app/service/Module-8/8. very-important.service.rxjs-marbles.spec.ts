@@ -79,7 +79,7 @@ xdescribe('Module 7: VeryImportantServiceTS (with rxjs-marbles)', () => {
     );
   });
 
-
+  // homework
   xdescribe('getSearchResults (rxjs-marbles fakeSchedulers)', () => {
 
     it('should call this.http.get and get result', fakeSchedulers(() => {

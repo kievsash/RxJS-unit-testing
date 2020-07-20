@@ -20,7 +20,20 @@ xdescribe('Module 2: VirtualTimeScheduler', () => {
     service = TestBed.inject(VeryImportantServiceVTS);
   });
 
-  // trick
+  describe('getRangeASAP (with AsyncScheduler.delegate trick)', () => {
+    it('should emit 4 specific values (with trick)', () => {
+      const virtScheduler = new VirtualTimeScheduler();
+
+      // use trick with AsyncScheduler.delegate (assign virtScheduler)
+      // call function const range$ = service.getRangeASAP();
+      // subscribe to $range and add all values to array
+      // then call scheduler.flush()
+      // and then expect() to check result
+      // do not forget to assign undefined to AsyncScheduler.delegate
+
+    });
+  });
+
   describe('getData (with AsyncScheduler.delegate trick)', () => {
 
     it('should emit 3 specific values', () => {
