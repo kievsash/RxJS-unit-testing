@@ -7,7 +7,7 @@ import {tick} from '@angular/core/testing';
 import {tap, toArray} from 'rxjs/operators';
 
 
-xdescribe('Module 7: VeryImportantServiceTS (with rxjs-marbles)', () => {
+xdescribe('Module 8: VeryImportantServiceTS (with rxjs-marbles)', () => {
   let service;
   let mockHttp;
 

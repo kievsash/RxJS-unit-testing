@@ -5,7 +5,7 @@ import {TestScheduler} from 'rxjs/testing';
 import {HttpClient} from '@angular/common/http';
 import {VeryImportantServiceTS} from '../mine_services/3. very-important.service.TestScheduler';
 
-xdescribe('Module-4: VeryImportantService - with TestScheduler', () => {
+xdescribe('Module-5: VeryImportantService - with TestScheduler', () => {
   let service;
   let mockHttp;
 
